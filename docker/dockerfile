@@ -1,0 +1,79 @@
+# Stage 1: Builder Stage - Install dependencies
+FROM python:3.11-slim AS builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create and activate virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Upgrade pip
+RUN python -m pip install --upgrade pip
+
+WORKDIR /app
+
+# Copy requirements first to leverage cache
+COPY docker/requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY hypothetical_qa_api.py .
+
+# Create directories needed by the app
+RUN mkdir -p /app/logs
+
+# ---
+
+# Stage 2: Final Stage - Setup runtime environment
+FROM python:3.11-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install runtime dependencies (minimal)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy virtual environment from builder stage
+COPY --from=builder /opt/venv /opt/venv
+
+# Copy application code from builder stage
+COPY --from=builder /app/hypothetical_qa_api.py .
+
+# Copy directories created in builder
+COPY --from=builder /app/logs /app/logs
+
+# Activate virtual environment
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Set environment variables
+ENV LOG_LEVEL=INFO
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+
+# Set optimal permissions
+RUN chmod 755 /app/logs
+
+# Create non-root user for security
+RUN groupadd -r qaapp && useradd -r -g qaapp qaapp
+RUN chown -R qaapp:qaapp /app
+USER qaapp
+
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=15s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8000/ || exit 1
+
+# Command to run the application
+CMD ["python", "-m", "uvicorn", "hypothetical_qa_api:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

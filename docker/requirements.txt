@@ -1,0 +1,22 @@
+# Core API framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.30.0
+
+# HTTP requests for Ollama communication
+requests>=2.31.0
+
+# Text processing
+tiktoken>=0.5.2
+
+# Configuration and data models
+pydantic>=2.5.0
+pydantic-settings>=2.0.0
+
+# File upload support
+python-multipart>=0.0.6
+
+# Progress bars for processing
+tqdm>=4.60.0
+
+# Async support (included with uvicorn[standard] but explicit)
+# uvloop is included in uvicorn[standard] for better performance
