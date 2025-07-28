@@ -496,28 +496,60 @@ Below is the default prompt template used by the QA Generator. You can use this 
 
 ```python
 PROMPT_TEMPLATE = '''
-Act as an expert in retrieval-augmented generation systems. Your task is to create {num_pairs} high-quality, retrieval-optimized question-answer pairs from the provided text.
+Act as an expert technical content analyst with deep knowledge across multiple domains.
+Analyze the following text (delimited by lines containing only dashes and tags) carefully and generate EXACTLY {num_pairs} question-answer pairs (no more, no less) that demonstrate deep comprehension of the content.
+Make sure to count your output and verify you've created the exact number requested.
 
-CONTENT ANALYSIS GUIDELINES:
-Adapt your questions to the content type and domain. Consider the following specialized approaches:
+QUESTION QUALITY HIERARCHY:
+- PRIORITIZE: Conceptual understanding, principles, methodologies, and key insights
+- EMPHASIZE: "Why" and "how" questions over simple "what" questions
+- FOCUS: Questions that test comprehension and application, not memorization
+- AVOID: Trivial facts, overly granular details, or single-word answers
 
+QUESTION DISTRIBUTION (aim for balanced mix):
+- 40% Conceptual (principles, frameworks, theoretical understanding)
+- 30% Analytical (relationships, implications, cause-and-effect)  
+- 20% Applied (examples, case studies, practical applications)
+- 10% Factual (key definitions, important data points, essential facts)
+
+ANSWER REQUIREMENTS:
+- Provide sufficient context for standalone understanding
+- Include specific examples when available in the text
+- Aim for 2-4 sentences unless complexity requires more
+- Ensure answers are complete, accurate, and self-contained
+- Use proper grammar with articles (a, an, the) where needed
+
+CONTEXT-AWARE INSTRUCTIONS:
+Adapt your questions to the text type:
 - For NARRATIVE/LITERARY texts: Focus on plot development, character arcs, themes, symbolism, narrative techniques, conflicts, resolutions, and underlying messages
 - For SCIENTIFIC/TECHNICAL texts: Emphasize methodology, hypotheses, experimental design, findings, limitations, applications, technical terminology, and implications for the field
 - For ECONOMIC/BUSINESS texts: Target financial metrics, market trends, competitive strategies, ROI, stakeholder value, economic indicators, business models, industry disruptions, and strategic frameworks
 - For POLITICAL/POLICY texts: Address legislation details, political positions, policy impacts, constituent effects, implementation challenges, partisan perspectives, and governance implications
 - For HISTORICAL texts: Cover chronology, causation chains, historical context, key figures' roles, turning points, primary sources, historiographical debates, and long-term consequences
+- For MEDICAL/HEALTH texts: Focus on symptoms, diagnoses, treatment protocols, patient outcomes, clinical trials, side effects, epidemiological data, and healthcare implications
+- For LEGAL/REGULATORY texts: Examine precedents, statutory interpretation, compliance requirements, case law, legal reasoning, jurisdictional issues, and practical applications
+- For EDUCATIONAL/ACADEMIC texts: Target learning objectives, pedagogical approaches, theoretical frameworks, research methodologies, academic debates, and knowledge applications
+- For TECHNOLOGICAL/IT texts: Emphasize system architecture, algorithms, performance metrics, security considerations, scalability, integration challenges, and future developments
+- For ENVIRONMENTAL/CLIMATE texts: Address ecological impacts, sustainability metrics, climate data, conservation strategies, stakeholder interests, policy recommendations, and scientific consensus
+- For PHILOSOPHICAL/ETHICAL texts: Explore arguments, logical structures, ethical frameworks, thought experiments, counterarguments, practical implications, and philosophical traditions
+- For JOURNALISTIC/NEWS texts: Focus on the 5W1H, sources cited, potential biases, broader context, stakeholder reactions, fact vs. opinion, and societal impact
+- For BIOGRAPHICAL texts: Cover life events, achievements, challenges overcome, historical context, personal relationships, legacy, and character development
+- For INSTRUCTIONAL/HOW-TO texts: Target step sequences, required materials, skill prerequisites, common pitfalls, tips for success, safety considerations, and outcome expectations
+- For MARKETING/ADVERTISING texts: Analyze target audience, value propositions, persuasion techniques, brand messaging, call-to-action elements, and competitive positioning
 
 QUALITY CONTROLS - AVOID:
 - Questions about minor procedural details or trivial facts
 - Redundant questions covering the same concept
 - Questions with obvious yes/no or single-word answers
 - Grammar errors, missing articles, or incomplete sentences
+- Questions that could only be answered by someone with the exact text in front of them
 
 QUALITY STANDARDS:
-- Each question should focus on important concepts that improve retrieval
-- Questions should be retrieval-friendly and RAG-optimized
-- Prefer questions that capture key information and semantic relationships
-- Ensure variety in question types and coverage of content
+- Each question should test meaningful understanding of important concepts
+- Questions should be exam-worthy and educationally valuable
+- Prefer questions that require synthesis and analysis over recall
+- Ensure variety in question types and difficulty levels
+- Review for clarity, completeness, and educational value
 
 OUTPUT FORMAT:
 - Provide your response as a clean sequence of questions and answers
@@ -526,6 +558,33 @@ OUTPUT FORMAT:
 - Enclose each answer in <A> and </A> tags
 - Do not add any extra text, explanations, or apologies outside the tags
 - Use the same language as the source text
+- Review your output before submitting to ensure grammar and completeness
+
+ENHANCED EXAMPLES:
+
+Conceptual Questions:
+<Q>What is the fundamental principle behind the Build-Measure-Learn feedback loop in lean startup methodology?</Q>
+<A>The fundamental principle is to minimize the time and resources spent building products that customers don't want by rapidly testing hypotheses through small experiments, measuring customer response, and learning from the results to inform the next iteration.</A>
+
+Analytical Questions:
+<Q>How does the concept of validated learning differ from traditional business planning approaches?</Q>
+<A>Validated learning relies on empirical data from real customer interactions and behavior to test business assumptions, while traditional planning often depends on market research, forecasts, and theoretical analysis that may not reflect actual customer needs or market conditions.</A>
+
+Applied Questions:
+<Q>What specific techniques did IMVU use to test their instant messaging product assumptions with customers?</Q>
+<A>IMVU brought potential customers into their office to try the product directly, conducted numerous conversations with users, and observed that teenagers and tech early adopters were more likely to engage while mainstream users found it too unfamiliar and resisted downloading or sharing it.</A>
+
+Factual Questions:
+<Q>What are the three main engines of growth identified in the lean startup model?</Q>
+<A>The three main engines of growth are the viral engine (customers bring in new customers through word-of-mouth or product sharing), the sticky engine (focuses on customer retention and reducing churn), and the paid engine (uses advertising or sales to acquire customers profitably).</A>
+
+FINAL CHECK:
+Before submitting, verify:
+1. You have created EXACTLY {num_pairs} question-answer pairs
+2. Questions focus on important concepts rather than trivial details
+3. Answers are complete and grammatically correct
+4. You have a good mix of question types
+5. Each question tests distinct knowledge or understanding
 
 TEXT TO ANALYZE:
 ------------------------------------------------------------------------------------------
@@ -533,6 +592,7 @@ TEXT TO ANALYZE:
 {chunk}
 </text>
 ------------------------------------------------------------------------------------------
+"""
 '''
 ```
 
