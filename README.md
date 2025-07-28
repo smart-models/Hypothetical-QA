@@ -6,11 +6,11 @@
 
 # Hypothetical Chunks Questions Answer Generator
 
-Hypothetical Chunks Questions Answer Generator is a specialized tool designed for Retrieval-Augmented Generation (RAG) systems that transforms text chunks into high-quality hypothetical question-answer pairs using Large Language Models (LLMs). The system intelligently analyzes input text and generates contextually relevant questions with comprehensive answers, enhancing RAG systems by creating synthetic training data that improves retrieval performance and query understanding.
+Hypothetical Chunks Questions Answer Generator is a specialized tool designed for Retrieval-Augmented Generation (RAG) systems that transforms text chunks into high-quality hypothetical question-answer pairs using Large Language Models (LLMs). The system intelligently analyzes input text and generates contextually relevant questions with comprehensive answers, enhancing RAG systems by creating synthetic data that improves retrieval performance and query understanding.
 
 Built on modern FastAPI architecture with seamless Ollama integration, this production-ready solution leverages state-of-the-art language models to understand content semantics and generate relevant question-answer pairs. The system employs sophisticated prompt engineering and quality control mechanisms to ensure generated content maintains semantic accuracy and contextual relevance to the source material.
 
-The system is designed for scalable deployment in RAG pipelines, vector database enrichment, and AI assistant training. Whether you're processing knowledge base documents, technical documentation, or domain-specific content, the Hypothetical QA Generator provides a robust solution for creating synthetic question-answer pairs that improve retrieval performance at scale.
+The system is designed for scalable deployment in RAG pipelines, vector database enrichment, and AI assistant. Whether you're processing knowledge base documents, technical documentation, or domain-specific content, the Hypothetical QA Generator provides a robust solution for creating synthetic question-answer pairs that improve retrieval performance at scale.
 
 ## Key Features
 
