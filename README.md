@@ -593,7 +593,6 @@ TEXT TO ANALYZE:
 </text>
 ------------------------------------------------------------------------------------------
 """
-'''
 ```
 
 ### Important Note When Creating Custom Prompts
