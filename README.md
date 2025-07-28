@@ -35,7 +35,7 @@ The system is designed for scalable deployment in RAG pipelines, vector database
   - [Quality Control and Validation](#quality-control-and-validation)
   - [Comparison with Traditional Q&A Generation](#comparison-with-traditional-qa-generation)
 - [Advantages of the Solution](#advantages-of-the-solution)
-  - [Educational Value](#educational-value)
+  - [RAG Enhancement Value](#rag-enhancement-value)
   - [Production Performance](#production-performance)
   - [Flexibility and Customization](#flexibility-and-customization)
 - [Installation and Deployment](#installation-and-deployment)
@@ -63,11 +63,11 @@ The system is designed for scalable deployment in RAG pipelines, vector database
 The QA Generator implements a sophisticated multi-stage pipeline that combines advanced prompt engineering with LLM-powered content generation:
 
 1. **Input Processing**: The API accepts JSON documents containing text chunks through the `/process-chunks/` endpoint
-2. **Content Analysis**: Each text chunk is analyzed for content type, complexity, and educational value potential
+2. **Content Analysis**: Each text chunk is analyzed for content type, complexity, and RAG enhancement potential
 3. **Intelligent Prompting**: The system applies specialized prompts based on content characteristics (scientific, narrative, technical, etc.)
 4. **Parallel Generation**: Multiple chunks are processed concurrently using configurable worker pools for optimal throughput
 5. **Q&A Extraction**: Generated content is parsed using sophisticated regex patterns to extract clean question-answer pairs
-6. **Quality Validation**: Each Q&A pair undergoes comprehensive quality checks including completeness, relevance, and educational value
+6. **Quality Validation**: Each Q&A pair undergoes comprehensive quality checks including completeness, relevance, and retrieval effectiveness
 7. **Retry Logic**: Failed generations are automatically retried with exponential backoff for robust error handling
 8. **Metadata Collection**: Detailed statistics are collected including processing times, quality scores, and generation success rates
 9. **Response Assembly**: All Q&A pairs are combined with comprehensive metadata for client consumption
@@ -120,16 +120,16 @@ def qa_generation_process(chunks):
     }
 ```
 
-This approach ensures high-quality educational content generation while maintaining robustness and performance in production environments.
+This approach ensures high-quality synthetic data generation for RAG systems while maintaining robustness and performance in production environments.
 
 ### Quality Control and Validation
 
 The QA Generator implements comprehensive quality assurance mechanisms:
 
-- **Content Validation**: Ensures generated questions are complete, grammatically correct, and educationally valuable
+- **Content Validation**: Ensures generated questions are complete, grammatically correct, and retrieval-optimized
 - **Answer Verification**: Validates that answers are comprehensive, accurate, and properly formatted
 - **Semantic Consistency**: Checks that Q&A pairs maintain semantic relationship with source content
-- **Educational Standards**: Applies pedagogical principles to ensure questions test meaningful understanding
+- **RAG Standards**: Applies retrieval principles to ensure questions improve search performance
 - **Format Compliance**: Validates proper question/answer formatting and structure
 
 ### Comparison with Traditional Q&A Generation
@@ -137,7 +137,7 @@ The QA Generator implements comprehensive quality assurance mechanisms:
 | Feature | Traditional Q&A Tools | Hypothetical Chunks QA Generator |
 |---------|----------------------|-----------------------------------|
 | Content Understanding | Rule-based or template-driven | LLM-powered semantic analysis |
-| Question Quality | Basic extraction or simple patterns | Educationally optimized with quality scoring |
+| Question Quality | Basic extraction or simple patterns | RAG-optimized with quality scoring |
 | Content Adaptation | One-size-fits-all approach | Specialized prompts for different content types |
 | Error Handling | Limited retry mechanisms | Robust retry logic with exponential backoff |
 | Scalability | Sequential processing | Parallel processing with worker pools |
@@ -146,15 +146,15 @@ The QA Generator implements comprehensive quality assurance mechanisms:
 
 ## Advantages of the Solution
 
-### Educational Value
+### RAG Enhancement Value
 
-The QA Generator creates pedagogically sound educational content:
+The QA Generator creates high-quality synthetic data for RAG systems:
 
 - **Contextual Relevance**: Questions are generated based on actual content meaning, not just keyword matching
-- **Educational Standards**: Prompts are designed to generate exam-worthy, educationally valuable questions
+- **RAG Optimization**: Prompts are designed to generate retrieval-friendly questions with comprehensive answers
 - **Content Type Awareness**: Different prompting strategies for narrative, scientific, technical, and other content types
-- **Comprehension Focus**: Emphasizes understanding and analysis over simple recall
-- **Quality Assurance**: Multi-layered validation ensures educational effectiveness
+- **Semantic Focus**: Emphasizes understanding and analysis to improve retrieval performance
+- **Quality Assurance**: Multi-layered validation ensures retrieval effectiveness
 
 ### Production Performance
 
@@ -168,7 +168,7 @@ The system is optimized for enterprise-grade deployment:
 
 ### Flexibility and Customization
 
-The QA Generator adapts to diverse educational use cases:
+The QA Generator adapts to diverse RAG use cases:
 
 - **Model Selection**: Support for various LLM models through Ollama integration
 - **Parameter Control**: Fine-tune generation temperature, context windows, and retry behavior
@@ -496,7 +496,7 @@ Below is the default prompt template used by the QA Generator. You can use this 
 
 ```python
 PROMPT_TEMPLATE = '''
-Act as an expert educator and assessment specialist. Your task is to create {num_pairs} high-quality, educationally valuable question-answer pairs from the provided text.
+Act as an expert in retrieval-augmented generation systems. Your task is to create {num_pairs} high-quality, retrieval-optimized question-answer pairs from the provided text.
 
 CONTENT ANALYSIS GUIDELINES:
 Adapt your questions to the content type and domain. Consider the following specialized approaches:
@@ -514,10 +514,10 @@ QUALITY CONTROLS - AVOID:
 - Grammar errors, missing articles, or incomplete sentences
 
 QUALITY STANDARDS:
-- Each question should test meaningful understanding of important concepts
-- Questions should be exam-worthy and educationally valuable
-- Prefer questions that require synthesis and analysis over recall
-- Ensure variety in question types and difficulty levels
+- Each question should focus on important concepts that improve retrieval
+- Questions should be retrieval-friendly and RAG-optimized
+- Prefer questions that capture key information and semantic relationships
+- Ensure variety in question types and coverage of content
 
 OUTPUT FORMAT:
 - Provide your response as a clean sequence of questions and answers
@@ -574,15 +574,15 @@ For detailed testing information, see the [test documentation](test/README.md).
 
 ## Contributing
 
-Hypothetical Chunks Questions Answer Generator is an open-source project that welcomes contributions from the community. Your involvement helps improve educational technology for everyone.
+Hypothetical Chunks Questions Answer Generator is an open-source project that welcomes contributions from the community. Your involvement helps improve RAG technology for everyone.
 
 We value contributions of all kinds:
 - Bug fixes and performance improvements
 - Documentation enhancements  
-- New features and educational capabilities
+- New features and RAG-focused capabilities
 - Test coverage improvements
 - Integration examples and tutorials
-- Educational prompt templates
+- RAG-optimized prompt templates
 
 If you're interested in contributing:
 
@@ -599,6 +599,6 @@ Please ensure your code follows the existing style conventions and includes appr
 
 For major changes, please open an issue first to discuss what you would like to change.
 
-Happy Learning with QA Generator!
+Happy RAG Enhancement with QA Generator!
 
 ---
