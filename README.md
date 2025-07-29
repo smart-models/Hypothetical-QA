@@ -4,6 +4,8 @@
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 ![Ollama](https://img.shields.io/badge/Ollama-Compatible-orange)
 
+![Hypothetical Questions Answer](logo.png)
+
 # Hypothetical Questions Answer
 
 Hypothetical Questions Answer is a specialized tool designed for Retrieval-Augmented Generation (RAG) systems that transforms text chunks into high-quality hypothetical question-answer pairs using Large Language Models (LLMs). The system intelligently analyzes input text and generates contextually relevant questions with comprehensive answers, enhancing RAG systems by creating synthetic data that improves retrieval performance and query understanding.
