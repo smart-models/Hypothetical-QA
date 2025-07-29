@@ -192,7 +192,7 @@ Before proceeding with any installation method, clone or download the project:
 ```bash
 # If using git
 git clone https://github.com/smart-models/Hypothetical-QA.git
-cd "Hypothetical Chunks Questions Answer"
+cd Hypothetical-QA
 
 # Or download and extract the project files
 ```
