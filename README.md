@@ -191,7 +191,7 @@ The QA Generator adapts to diverse RAG use cases:
 Before proceeding with any installation method, clone or download the project:
 ```bash
 # If using git
-git clone <repository-url>
+git clone https://github.com/smart-models/Hypothetical-QA.git
 cd "Hypothetical Chunks Questions Answer"
 
 # Or download and extract the project files
