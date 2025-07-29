@@ -289,7 +289,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Q&A Generation API",
     description="An API to generate question-answer pairs from text chunks using Ollama.",
-    version="0.50",
+    version="0.5.0",
     lifespan=lifespan,
 )
 
@@ -317,33 +317,33 @@ def get_token_count(text: str) -> int:
 
 
 def calculate_honest_quality_score(chunks: List[dict], results: List[dict], quality_issues: Dict[str, int]) -> float:
-    """Calcola quality score onesto che riflette problemi reali nei chunk e risultati.
+    """Calculate an honest quality score that reflects real issues in chunks and results.
     
     Args:
-        chunks: Lista dei chunk originali
-        results: Lista dei risultati dell'elaborazione
-        quality_issues: Dizionario con conteggio dei problemi rilevati
+        chunks: List of original chunks
+        results: List of processing results
+        quality_issues: Dictionary with count of detected problems
     
     Returns:
-        float: Quality score tra 0.0 e 1.0 che riflette la qualità reale
+        float: Quality score between 0.0 and 1.0 that reflects actual quality
     """
     if not chunks or not results:
         return 0.0
     
     total_chunks = len(chunks)
     
-    # Score base dal parsing success tradizionale
+    # Base score from traditional successful parsing
     successful_parses = sum(1 for r in results if r.get("metrics", {}).get("parsing_successful", False))
     base_score = successful_parses / total_chunks if total_chunks > 0 else 0
     
-    # Calcola penalità basate sui problemi rilevati
+    # Calculate penalties based on detected problems
     total_issues = sum(quality_issues.values())
     issue_penalty = min(total_issues / total_chunks, 0.8)  # Max 80% penalty
     
-    # Penalità aggiuntiva per no_output_generated (più grave)
+    # Additional penalty for no_output_generated (more severe)
     no_output_penalty = (quality_issues.get("no_output_generated", 0) / total_chunks) * 0.3
     
-    # Score finale
+    # Final score
     final_score = max(0.0, base_score - issue_penalty - no_output_penalty)
     
     return round(final_score, 2)
