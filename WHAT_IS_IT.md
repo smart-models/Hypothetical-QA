@@ -1,14 +1,14 @@
 ![What is it?](what-is-it.jpg)
 
-# Technical Deep Dive: How Hypothetical Chunks QA Generator Works
+# Technical Deep Dive: How Hypothetical Questions Answer Works
 
-The Hypothetical Chunks Questions Answer Generator is an advanced synthetic data generation system that transforms text chunks into high-quality question-answer pairs for Retrieval-Augmented Generation (RAG) systems using Large Language Models (LLMs). It intelligently analyzes input text and generates contextually relevant, retrieval-optimized questions with comprehensive answers, making it ideal for creating synthetic datasets that enhance RAG performance.
+The Hypothetical Questions Answer is an advanced synthetic data generation system that transforms text chunks into high-quality question-answer pairs for Retrieval-Augmented Generation (RAG) systems using Large Language Models (LLMs). It intelligently analyzes input text and generates contextually relevant, retrieval-optimized questions with comprehensive answers, making it ideal for creating synthetic datasets that enhance RAG performance.
 
 ## Core Concepts
 
 ### Intelligent Q&A Generation
 
-Unlike traditional Q&A generation approaches that rely on simple keyword extraction or template-based methods, the Hypothetical Chunks QA Generator uses sophisticated prompt engineering combined with Large Language Models to understand content semantics and generate retrieval-optimized question-answer pairs.
+Unlike traditional Q&A generation approaches that rely on simple keyword extraction or template-based methods, the Hypothetical Questions Answer Generator uses sophisticated prompt engineering combined with Large Language Models to understand content semantics and generate retrieval-optimized question-answer pairs.
 
 The intelligent approach has several advantages:
 - Generates contextually relevant questions that enhance retrieval accuracy
@@ -49,7 +49,7 @@ The API uses FastAPI's lifespan context manager for efficient resource managemen
 
 ### 2. LLM Integration Engine
 
-The QA Generator leverages Ollama for LLM capabilities, providing flexible model selection and local deployment options. The integration includes:
+The Hypothetical Questions Answer leverages Ollama for LLM capabilities, providing flexible model selection and local deployment options. The integration includes:
 
 - **Model Management**: Automatic model availability checking and pulling
 - **Flexible Configuration**: Support for different LLM models via environment variables
@@ -74,7 +74,7 @@ The core Q&A generation flow consists of several sophisticated stages:
 
 ### 4. Quality Control System
 
-The QA Generator implements a multi-layered quality assurance system:
+The Hypothetical Questions Answer implements a multi-layered quality assurance system:
 
 **Parsing and Extraction**:
 - Primary regex-based parsing using `<Q>` and `<A>` tags for structured output

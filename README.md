@@ -4,9 +4,9 @@
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 ![Ollama](https://img.shields.io/badge/Ollama-Compatible-orange)
 
-# Hypothetical Chunks Questions Answer Generator
+# Hypothetical Questions Answer
 
-Hypothetical Chunks Questions Answer Generator is a specialized tool designed for Retrieval-Augmented Generation (RAG) systems that transforms text chunks into high-quality hypothetical question-answer pairs using Large Language Models (LLMs). The system intelligently analyzes input text and generates contextually relevant questions with comprehensive answers, enhancing RAG systems by creating synthetic data that improves retrieval performance and query understanding.
+Hypothetical Questions Answer is a specialized tool designed for Retrieval-Augmented Generation (RAG) systems that transforms text chunks into high-quality hypothetical question-answer pairs using Large Language Models (LLMs). The system intelligently analyzes input text and generates contextually relevant questions with comprehensive answers, enhancing RAG systems by creating synthetic data that improves retrieval performance and query understanding.
 
 Built on modern FastAPI architecture with seamless Ollama integration, this production-ready solution leverages state-of-the-art language models to understand content semantics and generate relevant question-answer pairs. The system employs sophisticated prompt engineering and quality control mechanisms to ensure generated content maintains semantic accuracy and contextual relevance to the source material.
 
@@ -60,7 +60,7 @@ The system is designed for scalable deployment in RAG pipelines, vector database
 
 ### The Processing Pipeline
 
-The QA Generator implements a sophisticated multi-stage pipeline that combines advanced prompt engineering with LLM-powered content generation:
+The Hypothetical Questions Answer implements a sophisticated multi-stage pipeline that combines advanced prompt engineering with LLM-powered content generation:
 
 1. **Input Processing**: The API accepts JSON documents containing text chunks through the `/process-chunks/` endpoint
 2. **Content Analysis**: Each text chunk is analyzed for content type, complexity, and RAG enhancement potential
@@ -74,7 +74,7 @@ The QA Generator implements a sophisticated multi-stage pipeline that combines a
 
 ### Intelligent Content Analysis
 
-The system employs advanced content understanding mechanisms:
+The Hypothetical Questions Answer system employs advanced content understanding mechanisms:
 
 ```python
 # Conceptual representation of the QA generation process
@@ -124,7 +124,7 @@ This approach ensures high-quality synthetic data generation for RAG systems whi
 
 ### Quality Control and Validation
 
-The QA Generator implements comprehensive quality assurance mechanisms:
+The Hypothetical Questions Answer implements comprehensive quality assurance mechanisms:
 
 - **Content Validation**: Ensures generated questions are complete, grammatically correct, and retrieval-optimized
 - **Answer Verification**: Validates that answers are comprehensive, accurate, and properly formatted
@@ -148,7 +148,7 @@ The QA Generator implements comprehensive quality assurance mechanisms:
 
 ### RAG Enhancement Value
 
-The QA Generator creates high-quality synthetic data for RAG systems:
+The Hypothetical Questions Answer creates high-quality synthetic data for RAG systems:
 
 - **Contextual Relevance**: Questions are generated based on actual content meaning, not just keyword matching
 - **RAG Optimization**: Prompts are designed to generate retrieval-friendly questions with comprehensive answers
@@ -168,7 +168,7 @@ The system is optimized for enterprise-grade deployment:
 
 ### Flexibility and Customization
 
-The QA Generator adapts to diverse RAG use cases:
+The Hypothetical Questions Answer adapts to diverse RAG use cases:
 
 - **Model Selection**: Support for various LLM models through Ollama integration
 - **Parameter Control**: Fine-tune generation temperature, context windows, and retry behavior
