@@ -62,7 +62,6 @@ Thumbs.db
 
 # Project specific
 response_*.json
-test_chunks.json
 
 # Docker
 .dockerignore
