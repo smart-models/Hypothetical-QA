@@ -6,7 +6,7 @@ services:
     build:
       context: .. # Build context is the parent directory (project root)
       dockerfile: docker/dockerfile
-    image: hypothetical-chunks-qa:latest
+    image: hypothetical-qa:latest
     restart: unless-stopped
     volumes:
       - qa_logs:/app/logs
