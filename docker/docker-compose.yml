@@ -1,4 +1,4 @@
-name: QA-API
+name: Hypothetical-QA
 
 services:
   # 1. Define a base service configuration
