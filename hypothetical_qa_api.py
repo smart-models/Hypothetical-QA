@@ -197,7 +197,7 @@ class Metadata(BaseModel):
         "short_chunks": 0,
         "minimal_content": 0,
         "special_chars_only": 0,
-        "no_output_generated": 0
+        "no_output_generated": 0,
     }
     llm_model: str
     temperature: float
@@ -253,7 +253,7 @@ async def lifespan(app: FastAPI):
     and cleans up resources on shutdown.
     """
     logger.info("QA API starting up...")
-    
+
     # First check if the Ollama server is reachable at all
     # Check server with verbose logging (this is only done once at startup)
     server_reachable = check_ollama_server_reachable(verbose=False)
@@ -316,36 +316,42 @@ def get_token_count(text: str) -> int:
         return len(text.split())
 
 
-def calculate_honest_quality_score(chunks: List[dict], results: List[dict], quality_issues: Dict[str, int]) -> float:
+def calculate_honest_quality_score(
+    chunks: List[dict], results: List[dict], quality_issues: Dict[str, int]
+) -> float:
     """Calculate an honest quality score that reflects real issues in chunks and results.
-    
+
     Args:
         chunks: List of original chunks
         results: List of processing results
         quality_issues: Dictionary with count of detected problems
-    
+
     Returns:
         float: Quality score between 0.0 and 1.0 that reflects actual quality
     """
     if not chunks or not results:
         return 0.0
-    
+
     total_chunks = len(chunks)
-    
+
     # Base score from traditional successful parsing
-    successful_parses = sum(1 for r in results if r.get("metrics", {}).get("parsing_successful", False))
+    successful_parses = sum(
+        1 for r in results if r.get("metrics", {}).get("parsing_successful", False)
+    )
     base_score = successful_parses / total_chunks if total_chunks > 0 else 0
-    
+
     # Calculate penalties based on detected problems
     total_issues = sum(quality_issues.values())
     issue_penalty = min(total_issues / total_chunks, 0.8)  # Max 80% penalty
-    
+
     # Additional penalty for no_output_generated (more severe)
-    no_output_penalty = (quality_issues.get("no_output_generated", 0) / total_chunks) * 0.3
-    
+    no_output_penalty = (
+        quality_issues.get("no_output_generated", 0) / total_chunks
+    ) * 0.3
+
     # Final score
     final_score = max(0.0, base_score - issue_penalty - no_output_penalty)
-    
+
     return round(final_score, 2)
 
 
@@ -566,11 +572,13 @@ def ensure_ollama_model(model_name: str, fallback_model: str = None) -> str:
         # Return the requested model name even though we can't verify it
         # This allows the application to start even if Ollama is not available
         return model_name
-    
+
     # Check if model exists
     logger.info(f"Checking if QA model '{model_name}' is available locally...")
     if not check_ollama_model(model_name):
-        logger.warning(f"QA model '{model_name}' not found locally. Attempting to pull...")
+        logger.warning(
+            f"QA model '{model_name}' not found locally. Attempting to pull..."
+        )
 
         # Try to pull the model
         if pull_ollama_model(model_name, stream=False):
@@ -602,7 +610,9 @@ def ensure_ollama_model(model_name: str, fallback_model: str = None) -> str:
                     # Return the fallback model name anyway, as that's our best option
                     return fallback_model
             else:
-                logger.info(f"Fallback QA model '{fallback_model}' is available locally")
+                logger.info(
+                    f"Fallback QA model '{fallback_model}' is available locally"
+                )
                 return fallback_model
         else:
             # No fallback provided or fallback is the same as requested model
@@ -856,7 +866,7 @@ def generate_qa_from_chunk(
     while qa_attempts < max_qa_attempts:
         # Retry configuration for network errors
         last_exception = None
-        
+
         for attempt in range(network_retries):
             try:
                 response = requests.post(
@@ -898,7 +908,7 @@ def generate_qa_from_chunk(
                         data["prompt"] = enhanced_prompt
                         qa_attempts += 1
                         break  # Break out of the network retry loop and try a new QA generation attempt
-                        
+
                 else:
                     # Log the error and prepare for retry.
                     logger.warning(
@@ -907,7 +917,9 @@ def generate_qa_from_chunk(
                     )
                     if attempt == network_retries - 1:
                         # On last attempt, raise the exception.
-                        raise Exception(f"Error generating QA pairs: {response.status_code}")
+                        raise Exception(
+                            f"Error generating QA pairs: {response.status_code}"
+                        )
 
             except requests.exceptions.Timeout as e:
                 logger.warning(
@@ -942,7 +954,9 @@ def generate_qa_from_chunk(
 
         # If we've exhausted all network retries, log the error and raise an exception.
         if last_exception:
-            logger.error(f"Failed to connect to OLLAMA for chunk {chunk_id} after {network_retries} attempts")
+            logger.error(
+                f"Failed to connect to OLLAMA for chunk {chunk_id} after {network_retries} attempts"
+            )
             raise Exception(
                 f"Failed to connect to OLLAMA after {network_retries} attempts: {str(last_exception)}"
             )
@@ -972,7 +986,7 @@ async def health_check():
 
     return {
         "status": status,
-        "version": "1.1.0",
+        "version": app.version,
         "ollama_status": "connected" if ollama_available else "unavailable",
         "ollama_url": get_settings().ollama_base_url,
     }
@@ -984,17 +998,17 @@ async def process_chunks(
     llm_model: Optional[str] = Query(
         get_settings().llm_model,
         description="LLM model to use",
-        #example=get_settings().llm_model,
+        # example=get_settings().llm_model,
     ),
     temperature: Optional[float] = Query(
         get_settings().temperature,
         description="Generation temperature",
-        #example=get_settings().temperature,
+        # example=get_settings().temperature,
     ),
     context_window: Optional[int] = Query(
         get_settings().context_window,
         description="LLM context window",
-        #example=get_settings().context_window,
+        # example=get_settings().context_window,
     ),
     custom_prompt: Optional[str] = Query(None, description="Custom prompt template"),
     n_qa_pairs: int = Query(
@@ -1091,13 +1105,13 @@ async def process_chunks(
             "short_chunks": 0,
             "minimal_content": 0,
             "special_chars_only": 0,
-            "no_output_generated": 0
+            "no_output_generated": 0,
         }
 
         # NUOVO: Analyze chunks for quality issues
         for chunk in chunks:
             chunk_text = chunk.get("text", "").strip()
-            
+
             if len(chunk_text) == 0:
                 quality_issues["empty_chunks"] += 1
             elif len(chunk_text) < 10:
@@ -1131,11 +1145,11 @@ async def process_chunks(
                 chunk_info = futures[future]
                 try:
                     qa_result, metrics = future.result()
-                    
+
                     # NUOVO: Track no output issues
                     if not qa_result or not qa_result.strip():
                         quality_issues["no_output_generated"] += 1
-                    
+
                     results.append(
                         {
                             "id": chunk_info.get("id", -1),
@@ -1148,10 +1162,10 @@ async def process_chunks(
                     logger.error(
                         f"Error processing chunk {chunk_info.get('id', -1)}: {e}"
                     )
-                    
+
                     # NUOVO: Track processing failures
                     quality_issues["no_output_generated"] += 1
-                    
+
                     results.append(
                         {
                             "id": chunk_info.get("id", -1),
@@ -1267,9 +1281,11 @@ async def process_chunks(
             1 for r in results if r["metrics"].get("parsing_successful")
         )
         failed_parses = len(results) - total_successful_parses
-        
+
         # NUOVO: Quality score onesto
-        average_quality_score = calculate_honest_quality_score(chunks, results, quality_issues)
+        average_quality_score = calculate_honest_quality_score(
+            chunks, results, quality_issues
+        )
 
         metadata = Metadata(
             total_chunks=len(chunks),

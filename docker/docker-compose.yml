@@ -4,7 +4,7 @@ services:
   # 1. Define a base service configuration
   base-service:
     build:
-      context: .. # Build context is the parent directory (project root)
+      context: .. 
       dockerfile: docker/dockerfile
     image: hypothetical-qa:latest
     restart: unless-stopped
@@ -34,21 +34,13 @@ services:
   cpu:
     extends:
       service: base-service
-    container_name: cpu # Updated container name
+    container_name: cpu
     profiles:
       - cpu
     ports:
       - "${APP_PORT:-8000}:8000"
     environment:
-      - QA_APP_OLLAMA_API_BASE_URL=${OLLAMA_BASE_URL:-http://ollama-cpu:11434}
-    deploy:
-      resources:
-        limits:
-          memory: 12G        # Maximum memory limit
-          cpus: '8'          # Maximum CPU cores
-        reservations:
-          memory: 6G         # Minimum reserved memory
-          cpus: '4'          # Minimum reserved CPU cores
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama-cpu:11434}
     depends_on:
       - ollama-cpu
 
@@ -56,21 +48,20 @@ services:
   gpu:
     extends:
       service: base-service
-    container_name: gpu # Updated container name
+    container_name: gpu 
     profiles:
       - gpu
     ports:
       - "${APP_PORT:-8000}:8000"
     environment:
-      - QA_APP_OLLAMA_API_BASE_URL=${OLLAMA_BASE_URL:-http://ollama-gpu:11434}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama-gpu:11434}
     deploy:
       resources:
-        limits:
-          memory: 12G        # Maximum memory limit
-          cpus: '8'          # Maximum CPU cores
         reservations:
-          memory: 6G         # Minimum reserved memory
-          cpus: '4'          # Minimum reserved CPU cores
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ compute, utility ]
     depends_on:
       - ollama-gpu
   
@@ -110,14 +101,6 @@ services:
       - qa_ollama_cache:/tmp/ollama_cache
     ports:
       - "11434:11434"
-    deploy:
-      resources:
-        limits:
-          memory: 8G
-          cpus: '6'
-        reservations:
-          memory: 4G
-          cpus: '3'
     networks:
       - qa-net
 
@@ -179,7 +162,6 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      # Mounts the 'logs' folder from the project root
       device: ../logs
   qa_ollama_models:
     driver: local

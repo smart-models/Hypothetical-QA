@@ -17,6 +17,3 @@ python-multipart>=0.0.6
 
 # Progress bars for processing
 tqdm>=4.60.0
-
-# Async support (included with uvicorn[standard] but explicit)
-# uvloop is included in uvicorn[standard] for better performance
