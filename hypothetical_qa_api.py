@@ -841,7 +841,7 @@ def generate_qa_from_chunk(
     """
     settings = get_settings()
     api_url = settings.ollama_api_generate_url
-    timeout = 120  # seconds
+    timeout = 360 # seconds
 
     # Format the prompt with both num_pairs and the chunk text
     formatted_prompt = prompt.format(num_pairs=num_pairs, chunk=chunk)
