@@ -289,7 +289,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Q&A Generation API",
     description="An API to generate question-answer pairs from text chunks using Ollama.",
-    version="0.5.0",
+    version="0.5.1",
     lifespan=lifespan,
 )
 
