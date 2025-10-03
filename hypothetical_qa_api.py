@@ -7,9 +7,9 @@ import random
 import re
 from typing import List, Dict, Optional, Tuple, Any
 from pathlib import Path
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
-from fastapi import FastAPI, UploadFile, File, HTTPException, Query
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from tqdm import tqdm
 from contextlib import asynccontextmanager
@@ -199,12 +199,47 @@ class Metadata(BaseModel):
         "special_chars_only": 0,
         "no_output_generated": 0,
     }
-    llm_model: str
-    temperature: float
-    context_window: int
-    custom_prompt_used: bool
-    source: str
     processing_time: float
+
+
+_default_settings = get_settings()
+
+
+class ProcessChunksInput(BaseModel):
+    """Input parameters for process-chunks endpoint."""
+
+    llm_model: Optional[str] = Field(
+        default=_default_settings.llm_model,
+        description="LLM model to use for summarization",
+    )
+    temperature: Optional[float] = Field(
+        default=_default_settings.temperature,
+        description="Generation temperature (0.0 to 1.0)",
+        ge=0.0,
+        le=1.0,
+    )
+    context_window: Optional[int] = Field(
+        default=_default_settings.context_window,
+        description="Maximum context window size",
+        gt=0,
+    )
+    custom_prompt: Optional[str] = Field(
+        default=None,
+        description="Custom prompt template for Q&A generation",
+        example="custom_prompt",
+    )
+    n_qa_pairs: int = Field(
+        default=_default_settings.n_qa_pairs,
+        description="Number of Q&A pairs to generate per chunk",
+        ge=1,
+        le=10,
+    )
+    max_retries: int = Field(
+        default=_default_settings.default_max_retries,
+        description="Maximum retry attempts for LLM failures",
+        ge=1,
+        le=10,
+    )
 
 
 class ResponseModel(BaseModel):
@@ -289,7 +324,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Q&A Generation API",
     description="An API to generate question-answer pairs from text chunks using Ollama.",
-    version="0.5.1",
+    version="0.5.2",
     lifespan=lifespan,
 )
 
@@ -994,35 +1029,11 @@ async def health_check():
 
 @app.post("/process-chunks/", response_model=ResponseModel)
 async def process_chunks(
-    file: UploadFile = File(...),
-    llm_model: Optional[str] = Query(
-        get_settings().llm_model,
-        description="LLM model to use",
-        # example=get_settings().llm_model,
+    file: UploadFile = File(
+        ...,
+        description="JSON file containing chunks to process",
     ),
-    temperature: Optional[float] = Query(
-        get_settings().temperature,
-        description="Generation temperature",
-        # example=get_settings().temperature,
-    ),
-    context_window: Optional[int] = Query(
-        get_settings().context_window,
-        description="LLM context window",
-        # example=get_settings().context_window,
-    ),
-    custom_prompt: Optional[str] = Query(None, description="Custom prompt template"),
-    n_qa_pairs: int = Query(
-        get_settings().n_qa_pairs,
-        description="Number of QA pairs to generate per chunk",
-        ge=1,
-        le=10,
-    ),
-    max_retries: int = Query(
-        get_settings().default_max_retries,
-        description="Maximum retry attempts for LLM failures (network, parsing, corrections)",
-        ge=get_settings().min_retries,
-        le=get_settings().max_retries_limit,
-    ),
+    input_data: ProcessChunksInput = Depends(),
 ):
     """Process chunks from a JSON file and generate Q&A pairs for each chunk.
 
@@ -1032,17 +1043,7 @@ async def process_chunks(
 
     Args:
         file (UploadFile): The JSON file containing the text chunks.
-        llm_model (Optional[str], optional): The LLM model to use. Defaults to None.
-        temperature (Optional[float], optional): The generation temperature.
-                                                 Defaults to None.
-        context_window (Optional[int], optional): The LLM context window size.
-                                                  Defaults to None.
-        custom_prompt (Optional[str], optional): A custom prompt template to use.
-                                                 Defaults to None.
-        num_pairs (int, optional): The number of Q&A pairs to generate per chunk.
-                                   Defaults to 3.
-        max_retries (int, optional): The maximum number of retry attempts.
-                                     Defaults to 3.
+        input_data (ProcessChunksInput): Parameters for chunk processing.
 
     Raises:
         HTTPException: If the Ollama server is not reachable or the file is
@@ -1079,11 +1080,18 @@ async def process_chunks(
         qa_id_counter = 1
 
         settings = get_settings()
-        llm_model_to_use = llm_model or settings.llm_model
+
+        # Apply defaults from settings
+        llm_model_to_use = input_data.llm_model or settings.llm_model
         temperature_to_use = (
-            temperature if temperature is not None else settings.temperature
+            input_data.temperature
+            if input_data.temperature is not None
+            else settings.temperature
         )
-        context_window_to_use = context_window or settings.context_window
+        context_window_to_use = input_data.context_window or settings.context_window
+        custom_prompt = input_data.custom_prompt
+        n_qa_pairs = input_data.n_qa_pairs
+        max_retries = input_data.max_retries
 
         # Validate max_retries against settings limits
         max_retries = min(
